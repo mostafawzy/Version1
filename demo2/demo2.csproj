@@ -168,6 +168,12 @@
     <EmbeddedResource Include="Forms\FormAdd.resx">
       <DependentUpon>FormAdd.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDashboard.resx">
+      <DependentUpon>FormDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDone.resx">
+      <DependentUpon>FormDone.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormList.resx">
       <DependentUpon>FormList.cs</DependentUpon>
     </EmbeddedResource>
@@ -224,6 +230,54 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\to-do-list1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reminder %282%292.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reminder %282%293.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dweqwdq.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\swqchecklist.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\173369155393417827.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Welcome back! Your goals are waiting.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Welcome back! Your goals are waiting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Welcome back! Your goals are waiting1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reminder %281%292.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checklist.198x256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Welcome back! Your goals are waiting %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ww.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eref.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\output-onlinepngtools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imageedit_13_8186670110.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

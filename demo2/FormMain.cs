@@ -29,6 +29,8 @@ namespace demo2
         public FormMain()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
+            
             leftBorderBtn = new Panel();
             leftBorderBtn.Size = new Size(7, 60);
             panel2.Controls.Add(leftBorderBtn);
@@ -45,8 +47,8 @@ namespace demo2
 
         private struct RGBColors
         {
-            public static Color color1 = ColorTranslator.FromHtml("#fadbd8");
-            public static Color color2 = ColorTranslator.FromHtml("#d4e6f1");
+            public static Color color1 = ColorTranslator.FromHtml("#fadbd8"); 
+            public static Color color2 = ColorTranslator.FromHtml("#f8edc8");
             public static Color color3 = ColorTranslator.FromHtml("#f2f3f4");
             public static Color color4 = ColorTranslator.FromHtml("#fef5e7");
             public static Color color5 = ColorTranslator.FromHtml("#eafaf1");
@@ -67,7 +69,7 @@ namespace demo2
                 // currentBtn.TextImageRelation = TextImageRelation.TextBeforeImage;
                 //currentBtn.ImageAlign = ContentAlignment.MiddleCenter;
 
-                currentBtn.Padding = new Padding(17, 0, 20, 0);
+                currentBtn.Padding = new Padding(20, 0, 0, 0);
                 //LeftBordeBtn
                 leftBorderBtn.BackColor = color;
                 leftBorderBtn.Location = new Point(0, currentBtn.Location.Y);
@@ -96,7 +98,8 @@ namespace demo2
                 currentBtn.IconColor = ColorTranslator.FromHtml("#f6f4f0");
                 //currentBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
                 //currentBtn.ImageAlign = ContentAlignment.MiddleLeft;
-                currentBtn.Padding = new Padding(10, 0, 20, 0);
+                currentBtn.Padding = new Padding(10, 0, 10, 0);
+
             }
         }
 
@@ -109,15 +112,17 @@ namespace demo2
                 currentChildForm.Close();
             }
 
+
             // Set up the new child form
             currentChildForm = childForm;
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill; // Ensure the child form fills the panel
-            panelDesktop.Controls.Clear(); // Clear any existing controls in the panel
+            childForm.Dock = DockStyle.Fill;
+            childForm.Size =panelDesktop.Size;
+           // panelDesktop.Controls.Clear(); 
             panelDesktop.Controls.Add(childForm);
             panelDesktop.Tag = childForm;
-            childForm.BringToFront(); // Bring the child form to the front
+            childForm.BringToFront(); 
             childForm.Show();
         }
 
@@ -125,7 +130,8 @@ namespace demo2
         private void iconButton1_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color1);
-            openChildForm(new FormDashboard());
+            currentChildForm.Close();
+
         }
 
         private void iconButton2_Click(object sender, EventArgs e)
@@ -136,19 +142,25 @@ namespace demo2
 
         private void iconButton3_Click(object sender, EventArgs e)
         {
-            ActivateButton(sender, RGBColors.color3);
+            ActivateButton(sender, RGBColors.color1);
             openChildForm(new FormList());
         }
 
         private void iconButton4_Click(object sender, EventArgs e)
         {
-            ActivateButton(sender, RGBColors.color4);
+            ActivateButton(sender, RGBColors.color2);
             openChildForm(new FormDone());
         }
+        private void iconButton6_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender, RGBColors.color2);
+            currentChildForm.Close();
+        }
+
 
         private void iconButton5_Click(object sender, EventArgs e)
         {
-            ActivateButton(sender, RGBColors.color5);
+            ActivateButton(sender, RGBColors.color1);
             openChildForm(new FormLogin());
         }
 
@@ -170,10 +182,7 @@ namespace demo2
 
 
         }
-        private void iconButton6_Click(object sender, EventArgs e)
-        {
-
-        }
+        
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
          private extern static void ReleaseCapture();
@@ -193,6 +202,11 @@ namespace demo2
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }

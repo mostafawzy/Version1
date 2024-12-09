@@ -46,5 +46,10 @@ namespace demo2.Forms
         {
 
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
