@@ -64,16 +64,18 @@
             this.maskedTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.maskedTextBox1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold);
             this.maskedTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.maskedTextBox1.Location = new System.Drawing.Point(280, 558);
+            this.maskedTextBox1.Location = new System.Drawing.Point(253, 558);
             this.maskedTextBox1.Mask = "00/00/0000 00:00";
             this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(146, 37);
+            this.maskedTextBox1.Size = new System.Drawing.Size(173, 37);
             this.maskedTextBox1.TabIndex = 39;
             this.maskedTextBox1.ValidatingType = typeof(System.DateTime);
             // 
             // richTextBox1
             // 
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.richTextBox1.Location = new System.Drawing.Point(31, 123);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(395, 41);
@@ -105,7 +107,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::demo2.Properties.Resources.time1;
-            this.pictureBox1.Location = new System.Drawing.Point(432, 53);
+            this.pictureBox1.Location = new System.Drawing.Point(452, 31);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(291, 442);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -116,6 +118,8 @@
             // richTextBox2
             // 
             this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox2.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.richTextBox2.Location = new System.Drawing.Point(31, 283);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.Size = new System.Drawing.Size(395, 162);
@@ -161,6 +165,7 @@
             this.ClientSize = new System.Drawing.Size(899, 728);
             this.Controls.Add(this.panel1);
             this.Name = "FormAdd";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FormAdd";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

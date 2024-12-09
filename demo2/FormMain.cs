@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -11,24 +12,38 @@ using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaterialSkin;
-using MaterialSkin.Controls;
+using static System.Data.Entity.Infrastructure.Design.Executor;
+
 
 
 namespace demo2
 {
+
     public partial class FormMain : Form
     {
         //fields
+        private string connectionString = "Data Source=ReminderApp.db;";
+        private readonly object dbLock = new object();
+
+
         private IconButton currentBtn;
         private Panel leftBorderBtn;
         private Form currentChildForm;
         private System.Windows.Forms.Timer reminderTimer;
+        private Timer dateTimeTimer;
+        private Timer reminderStopTimer;
+
+        private System.Media.SoundPlayer soundPlayer;
+
 
 
         public FormMain()
         {
             InitializeComponent();
+          //  InitializeDatabase();
+            InitializeDateTimeUpdater();
+            dateTimeTimer.Start(); // Start the datetime updater
+            //InitializeReminderChecker();
             this.StartPosition = FormStartPosition.CenterScreen;
             
             leftBorderBtn = new Panel();
@@ -42,17 +57,30 @@ namespace demo2
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             reminderTimer = new System.Windows.Forms.Timer();
             reminderTimer.Interval = 1000; // 1 second interval
-           
+
+            reminderStopTimer = new Timer { Interval = 60000 }; // 1 minute interval
+            reminderStopTimer.Tick += ReminderStopTimer_Tick;
+
+        }
+
+
+        private void ReminderStopTimer_Tick(object sender, EventArgs e)
+        {
+            // Stop the reminder timer
+            reminderTimer.Stop();
+
+            // Optionally, you could disable the stop timer if you no longer need it
+            reminderStopTimer.Stop();
         }
 
         private struct RGBColors
         {
             public static Color color1 = ColorTranslator.FromHtml("#fadbd8"); 
             public static Color color2 = ColorTranslator.FromHtml("#f8edc8");
-            public static Color color3 = ColorTranslator.FromHtml("#f2f3f4");
-            public static Color color4 = ColorTranslator.FromHtml("#fef5e7");
-            public static Color color5 = ColorTranslator.FromHtml("#eafaf1");
-            public static Color color6 = ColorTranslator.FromHtml("#f4ecf7");
+           // public static Color color3 = ColorTranslator.FromHtml("#f2f3f4");
+           // public static Color color4 = ColorTranslator.FromHtml("#fef5e7");
+           // public static Color color5 = ColorTranslator.FromHtml("#eafaf1");
+           // public static Color color6 = ColorTranslator.FromHtml("#f4ecf7");
         }
 
         private void ActivateButton(object senderBtn, Color color)
@@ -62,15 +90,13 @@ namespace demo2
                 DisableButton();
                 //Button
                 currentBtn = (IconButton)senderBtn;
-                currentBtn.BackColor = ColorTranslator.FromHtml("#4D766E");
+                currentBtn.BackColor = ColorTranslator.FromHtml("#69A095");
                 currentBtn.ForeColor = color;
-                //currentBtn.TextAlign = ContentAlignment.MiddleCenter;
                 currentBtn.IconColor = color;
-                // currentBtn.TextImageRelation = TextImageRelation.TextBeforeImage;
-                //currentBtn.ImageAlign = ContentAlignment.MiddleCenter;
+                
 
                 currentBtn.Padding = new Padding(20, 0, 0, 0);
-                //LeftBordeBtn
+                
                 leftBorderBtn.BackColor = color;
                 leftBorderBtn.Location = new Point(0, currentBtn.Location.Y);
                 leftBorderBtn.Visible = true;
@@ -96,8 +122,7 @@ namespace demo2
                 currentBtn.ForeColor = ColorTranslator.FromHtml("#f6f4f0");
                // currentBtn.TextAlign = ContentAlignment.MiddleLeft;
                 currentBtn.IconColor = ColorTranslator.FromHtml("#f6f4f0");
-                //currentBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
-                //currentBtn.ImageAlign = ContentAlignment.MiddleLeft;
+                
                 currentBtn.Padding = new Padding(10, 0, 10, 0);
 
             }
@@ -182,19 +207,81 @@ namespace demo2
 
 
         }
+        // Timer Initialization
+        private void InitializeDateTimeUpdater()
+        {
+            dateTimeTimer = new Timer { Interval = 1000 };
+            dateTimeTimer.Tick += DateTimeTimer_Tick;
+        }
+
+        private void DateTimeTimer_Tick(object sender, EventArgs e)
+        {
+            maskedTextBox1.Text = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+            DateTime currentTime = DateTime.Now;
+            
+        }
+
+      // // Reminder Timer
+      // private void InitializeReminderChecker()
+      // {
+      //     reminderTimer = new Timer { Interval = 1000 };
+      //     reminderTimer.Tick += ReminderTimer_Tick;
+      //     reminderTimer.Start();
+      // }
+       
+        //private void ReminderTimer_Tick(object sender, EventArgs e)
+        //{
+            
+            //    using (var connection = new SQLiteConnection("Data Source=ReminderApp.db;"))
+            //    {
+            //        connection.Open();
+            //        string query = "SELECT Id, TaskName, Reminder, Passed FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
+            //        using (var command = new SQLiteCommand(query, connection))
+            //        {
+            //            command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            //            using (var reader = command.ExecuteReader())
+            //            {
+            //                while (reader.Read())
+            //                {
+            //                    string taskName = reader["TaskName"].ToString();
+            //                    DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
+            //
+            //                    // Check if the current time matches the reminder time
+            //                    DateTime currentTime = DateTime.Now;
+            //
+            //                    if (currentTime.Hour == reminderTime.Hour &&
+            //                        currentTime.Minute == reminderTime.Minute &&
+            //                        currentTime.Second == reminderTime.Second)
+            //                    {
+            //                        try
+            //                        {
+            //                            MessageBox.Show($"Reminder: {taskName} is due at {reminderTime}.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //
+            //                            
+            //                        }
+            //                        catch
+            //                        {
+            //                            MessageBox.Show("An error occurred while showing the reminder.");
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         
 
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-         private extern static void ReleaseCapture();
-       
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int IParam);
-        private void panel3_MouseDown(object sender, MouseEventArgs e)
-        {
-           ReleaseCapture();
-           SendMessage(this.Handle, 0x112, 0xf012, 0);
 
+        // Form Load and Closing Handlers
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            dateTimeTimer.Stop();
+            base.OnFormClosing(e);
         }
+
+
+
+
 
         private void FormMain_Load(object sender, EventArgs e)
         {
@@ -207,6 +294,16 @@ namespace demo2
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_ValueChanged_1(object sender, EventArgs e)
         {
 
         }
