@@ -43,7 +43,7 @@ namespace demo2
           //  InitializeDatabase();
             InitializeDateTimeUpdater();
             dateTimeTimer.Start(); // Start the datetime updater
-            //InitializeReminderChecker();
+            InitializeReminderChecker();
             this.StartPosition = FormStartPosition.CenterScreen;
             
             leftBorderBtn = new Panel();
@@ -221,55 +221,55 @@ namespace demo2
             
         }
 
-      // // Reminder Timer
-      // private void InitializeReminderChecker()
-      // {
-      //     reminderTimer = new Timer { Interval = 1000 };
-      //     reminderTimer.Tick += ReminderTimer_Tick;
-      //     reminderTimer.Start();
-      // }
-       
-        //private void ReminderTimer_Tick(object sender, EventArgs e)
-        //{
-            
-            //    using (var connection = new SQLiteConnection("Data Source=ReminderApp.db;"))
-            //    {
-            //        connection.Open();
-            //        string query = "SELECT Id, TaskName, Reminder, Passed FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
-            //        using (var command = new SQLiteCommand(query, connection))
-            //        {
-            //            command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-            //            using (var reader = command.ExecuteReader())
-            //            {
-            //                while (reader.Read())
-            //                {
-            //                    string taskName = reader["TaskName"].ToString();
-            //                    DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
-            //
-            //                    // Check if the current time matches the reminder time
-            //                    DateTime currentTime = DateTime.Now;
-            //
-            //                    if (currentTime.Hour == reminderTime.Hour &&
-            //                        currentTime.Minute == reminderTime.Minute &&
-            //                        currentTime.Second == reminderTime.Second)
-            //                    {
-            //                        try
-            //                        {
-            //                            MessageBox.Show($"Reminder: {taskName} is due at {reminderTime}.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //
-            //                            
-            //                        }
-            //                        catch
-            //                        {
-            //                            MessageBox.Show("An error occurred while showing the reminder.");
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-        
+       // Reminder Timer
+       private void InitializeReminderChecker()
+       {
+           reminderTimer = new Timer { Interval = 1000 };
+           reminderTimer.Tick += ReminderTimer_Tick;
+           reminderTimer.Start();
+       }
+
+        private void ReminderTimer_Tick(object sender, EventArgs e)
+        {
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT Id, TaskName, Reminder, Passed FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string taskName = reader["TaskName"].ToString();
+                            DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
+                            DateTime currentTime = DateTime.Now;
+
+                            // Allow a small range for matching reminders
+                            if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
+                            {
+                                try
+                                {
+                                    MessageBox.Show($"Reminder: {taskName} is due at {reminderTime}.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    if (soundPlayer == null)
+                                    {
+                                        soundPlayer = new System.Media.SoundPlayer();
+                                        soundPlayer.SoundLocation = @"C:\Users\Sanag\Downloads\12345.wav"; // Update to relative if needed
+                                    }
+                                    soundPlayer.PlayLooping();
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"An error occurred while showing the reminder: {ex.Message}");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
 
         // Form Load and Closing Handlers
