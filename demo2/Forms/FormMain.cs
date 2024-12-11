@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace demo2
@@ -169,72 +170,73 @@ namespace demo2
             reminderTimer.Start();
         }
 
-        private void ReminderTimer_Tick(object sender, EventArgs e)
-        {
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                string query = "SELECT Id, TaskName, Reminder, Passed FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
-                using (var command = new SQLiteCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    using (var reader = command.ExecuteReader())
-                    {
-                        var taskIdsToUpdate = new List<int>();
-      
-                        while (reader.Read())
-                        {
-                            int taskId = Convert.ToInt32(reader["Id"]);
-                            string taskName = reader["TaskName"].ToString();
-                            DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
-                            DateTime currentTime = DateTime.Now;
-      
-                            if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
-                            {
-                                try
-                                {
-                                    if (soundPlayer == null)
-                                    {
-                                        soundPlayer = new System.Media.SoundPlayer
-                                        {
-                                            SoundLocation = @"C:\Users\Sanag\Downloads\12345.wav"
-                                        };
-                                    }
-                                    soundPlayer.PlayLooping();
-                                    MessageBox.Show($"Reminder: {taskName} is due at {reminderTime}.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    soundPlayer.Stop();
-                                    taskIdsToUpdate.Add(taskId);
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show($"An error occurred while showing the reminder: {ex.Message}");
-                                }
-                            }
-                        }
-      
-                        if (taskIdsToUpdate.Count > 0)
-                        {
-                            UpdatePassedColumn(connection, taskIdsToUpdate);
-                        }
-                    }
-                }
-            }
-        }
-      
-        private void UpdatePassedColumn(SQLiteConnection connection, List<int> taskIds)
-        {
-            string updateQuery = "UPDATE Task SET Passed = 'Yes' WHERE Id = @Id";
-            using (var command = new SQLiteCommand(updateQuery, connection))
-            {
-                foreach (var taskId in taskIds)
-                {
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@Id", taskId);
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-      
+          private void ReminderTimer_Tick(object sender, EventArgs e)
+          {
+              using (var connection = new SQLiteConnection(connectionString))
+              {
+                  connection.Open();
+                  string query = "SELECT Id, TaskName, Reminder, Passed FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
+                  using (var command = new SQLiteCommand(query, connection))
+                  {
+                      command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                      using (var reader = command.ExecuteReader())
+                      {
+                          var taskIdsToUpdate = new List<int>();
+        
+                          while (reader.Read())
+                          {
+                              int taskId = Convert.ToInt32(reader["Id"]);
+                              string taskName = reader["TaskName"].ToString();
+                              DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
+                              DateTime currentTime = DateTime.Now;
+        
+                              if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
+                              {
+                                  try
+                                  {
+                                      if (soundPlayer == null)
+                                      {
+                                          soundPlayer = new System.Media.SoundPlayer
+                                          {
+                                              SoundLocation = @"C:\Users\Sanag\Downloads\12345.wav"
+                                          };
+                                      }
+                                      soundPlayer.PlayLooping();
+                                      MessageBox.Show($"Reminder: {taskName} is due at {reminderTime}.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                      soundPlayer.Stop();
+                                      taskIdsToUpdate.Add(taskId);
+                                  }
+                                  catch (Exception ex)
+                                  {
+                                      MessageBox.Show($"An error occurred while showing the reminder: {ex.Message}");
+                                  }
+                              }
+                          }
+        
+                          if (taskIdsToUpdate.Count > 0)
+                          {
+                              UpdatePassedColumn(connection, taskIdsToUpdate);
+                          }
+                      }
+                  }
+              }
+          }
+        
+          private void UpdatePassedColumn(SQLiteConnection connection, List<int> taskIds)
+          {
+              string updateQuery = "UPDATE Task SET Passed = 'Yes' WHERE Id = @Id";
+              using (var command = new SQLiteCommand(updateQuery, connection))
+              {
+                  foreach (var taskId in taskIds)
+                  {
+                      command.Parameters.Clear();
+                      command.Parameters.AddWithValue("@Id", taskId);
+                      command.ExecuteNonQuery();
+                  }
+              }
+          }
+        
+       
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             dateTimeTimer.Stop();
