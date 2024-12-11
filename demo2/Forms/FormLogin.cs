@@ -44,7 +44,7 @@ namespace demo2.Forms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // Register Button Action
+            
             string username = textBox1.Text;
             string password = textBox2.Text;
 
@@ -133,7 +133,6 @@ namespace demo2.Forms
         //     }
         //     return false;
         // }
-        private int loggedInUserId;
 
         private bool ValidateLogin(string username, string password)
         {
@@ -152,7 +151,7 @@ namespace demo2.Forms
                         if (VerifyPassword(password, storedHashedPassword))
                         {
                             int userId = Convert.ToInt32(reader["Id"]);
-                            SessionManager.Instance.SetUser(userId, username); // Set session data
+                            SessionManager.Instance.SetUser(userId, username);
                             return true;
                         }
                     }
