@@ -181,14 +181,14 @@ namespace demo2
                     using (var reader = command.ExecuteReader())
                     {
                         var taskIdsToUpdate = new List<int>();
-
+      
                         while (reader.Read())
                         {
                             int taskId = Convert.ToInt32(reader["Id"]);
                             string taskName = reader["TaskName"].ToString();
                             DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
                             DateTime currentTime = DateTime.Now;
-
+      
                             if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
                             {
                                 try
@@ -211,7 +211,7 @@ namespace demo2
                                 }
                             }
                         }
-
+      
                         if (taskIdsToUpdate.Count > 0)
                         {
                             UpdatePassedColumn(connection, taskIdsToUpdate);
@@ -220,7 +220,7 @@ namespace demo2
                 }
             }
         }
-
+      
         private void UpdatePassedColumn(SQLiteConnection connection, List<int> taskIds)
         {
             string updateQuery = "UPDATE Task SET Passed = 'Yes' WHERE Id = @Id";
@@ -234,7 +234,7 @@ namespace demo2
                 }
             }
         }
-
+      
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             dateTimeTimer.Stop();
@@ -275,10 +275,6 @@ namespace demo2
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e) { }
         private void dateTimePicker1_ValueChanged_1(object sender, EventArgs e) { }
-
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        private void panel3_Paint(object sender, PaintEventArgs e){}
     }
 }
