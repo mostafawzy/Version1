@@ -54,16 +54,17 @@
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(-2, 0);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(920, 769);
+            this.panel1.Size = new System.Drawing.Size(858, 784);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
             // 
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Akhbar MT", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.textBox2.Location = new System.Drawing.Point(145, 426);
+            this.textBox2.Location = new System.Drawing.Point(174, 414);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(306, 54);
             this.textBox2.TabIndex = 41;
@@ -71,7 +72,7 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Akhbar MT", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.textBox1.Location = new System.Drawing.Point(145, 273);
+            this.textBox1.Location = new System.Drawing.Point(174, 261);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(306, 54);
             this.textBox1.TabIndex = 40;
@@ -79,7 +80,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::demo2.Properties.Resources.imageedit_13_8186670110;
-            this.pictureBox1.Location = new System.Drawing.Point(220, 48);
+            this.pictureBox1.Location = new System.Drawing.Point(267, 36);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(136, 140);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -89,9 +90,9 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(196)))), ((int)(((byte)(189)))));
-            this.panel3.Location = new System.Drawing.Point(582, -17);
+            this.panel3.Location = new System.Drawing.Point(646, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(338, 769);
+            this.panel3.Size = new System.Drawing.Size(247, 830);
             this.panel3.TabIndex = 38;
             // 
             // panel2
@@ -109,7 +110,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Century Gothic", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
-            this.button2.Location = new System.Drawing.Point(327, 503);
+            this.button2.Location = new System.Drawing.Point(356, 610);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(124, 59);
             this.button2.TabIndex = 32;
@@ -124,7 +125,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
-            this.button1.Location = new System.Drawing.Point(145, 503);
+            this.button1.Location = new System.Drawing.Point(174, 610);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(124, 59);
             this.button1.TabIndex = 31;
@@ -137,7 +138,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.label2.Location = new System.Drawing.Point(149, 364);
+            this.label2.Location = new System.Drawing.Point(178, 352);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(163, 39);
             this.label2.TabIndex = 30;
@@ -148,7 +149,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.label1.Location = new System.Drawing.Point(149, 218);
+            this.label1.Location = new System.Drawing.Point(178, 206);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(174, 39);
             this.label1.TabIndex = 29;
@@ -158,12 +159,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 562);
+            this.ClientSize = new System.Drawing.Size(858, 784);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Bauhaus 93", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "FormLogin";
-            this.Padding = new System.Windows.Forms.Padding(4, 74, 4, 3);
             this.Text = "FormLogin";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -171,6 +170,9 @@
             this.ResumeLayout(false);
 
         }
+
+
+
 
         #endregion
 

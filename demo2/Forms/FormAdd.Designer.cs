@@ -52,9 +52,10 @@
             this.panel1.Controls.Add(this.richTextBox2);
             this.panel1.Controls.Add(this.iconButton1);
             this.panel1.Controls.Add(this.labelTaskName);
-            this.panel1.Location = new System.Drawing.Point(0, -2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(843, 771);
+            this.panel1.Size = new System.Drawing.Size(858, 784);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -64,7 +65,7 @@
             this.maskedTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.maskedTextBox1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold);
             this.maskedTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.maskedTextBox1.Location = new System.Drawing.Point(253, 558);
+            this.maskedTextBox1.Location = new System.Drawing.Point(274, 592);
             this.maskedTextBox1.Mask = "00/00/0000 00:00";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(173, 37);
@@ -87,7 +88,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.label1.Location = new System.Drawing.Point(35, 558);
+            this.label1.Location = new System.Drawing.Point(25, 595);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(201, 34);
             this.label1.TabIndex = 38;
@@ -107,9 +108,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::demo2.Properties.Resources.time1;
-            this.pictureBox1.Location = new System.Drawing.Point(452, 31);
+            this.pictureBox1.Location = new System.Drawing.Point(477, 34);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(291, 442);
+            this.pictureBox1.Size = new System.Drawing.Size(369, 511);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 36;
             this.pictureBox1.TabStop = false;
@@ -120,7 +121,7 @@
             this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox2.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox2.Location = new System.Drawing.Point(31, 283);
+            this.richTextBox2.Location = new System.Drawing.Point(31, 329);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.Size = new System.Drawing.Size(395, 162);
             this.richTextBox2.TabIndex = 35;
@@ -130,16 +131,16 @@
             // 
             this.iconButton1.FlatAppearance.BorderSize = 0;
             this.iconButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton1.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iconButton1.Font = new System.Drawing.Font("Century Gothic", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.iconButton1.ForeColor = System.Drawing.Color.DimGray;
             this.iconButton1.IconChar = FontAwesome.Sharp.IconChar.PlusCircle;
             this.iconButton1.IconColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton1.IconSize = 70;
+            this.iconButton1.IconSize = 85;
             this.iconButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton1.Location = new System.Drawing.Point(523, 537);
+            this.iconButton1.Location = new System.Drawing.Point(543, 572);
             this.iconButton1.Name = "iconButton1";
-            this.iconButton1.Size = new System.Drawing.Size(178, 75);
+            this.iconButton1.Size = new System.Drawing.Size(227, 99);
             this.iconButton1.TabIndex = 29;
             this.iconButton1.Text = "Add";
             this.iconButton1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -152,7 +153,7 @@
             this.labelTaskName.AutoSize = true;
             this.labelTaskName.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTaskName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.labelTaskName.Location = new System.Drawing.Point(25, 213);
+            this.labelTaskName.Location = new System.Drawing.Point(25, 259);
             this.labelTaskName.Name = "labelTaskName";
             this.labelTaskName.Size = new System.Drawing.Size(175, 34);
             this.labelTaskName.TabIndex = 25;
@@ -162,7 +163,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(899, 728);
+            this.ClientSize = new System.Drawing.Size(858, 784);
             this.Controls.Add(this.panel1);
             this.Name = "FormAdd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

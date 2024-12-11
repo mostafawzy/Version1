@@ -1,4 +1,5 @@
-﻿using System;
+﻿using demo2.Helpers;
+using System;
 using System.Data.SQLite;
 using System.Security.Cryptography;
 using System.Text;
@@ -111,27 +112,55 @@ namespace demo2.Forms
             return true;
         }
 
+        // private bool ValidateLogin(string username, string password)
+        // {
+        //     using (var connection = new SQLiteConnection(connectionString))
+        //     {
+        //         connection.Open();
+        //
+        //         string query = "SELECT Password FROM Users WHERE Username = @Username";
+        //         using (var command = new SQLiteCommand(query, connection))
+        //         {
+        //             command.Parameters.AddWithValue("@Username", username);
+        //             var result = command.ExecuteScalar();
+        //
+        //             if (result != null)
+        //             {
+        //                 string storedHashedPassword = result.ToString();
+        //                 return VerifyPassword(password, storedHashedPassword);
+        //             }
+        //         }
+        //     }
+        //     return false;
+        // }
+        private int loggedInUserId;
+
         private bool ValidateLogin(string username, string password)
         {
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-
-                string query = "SELECT Password FROM Users WHERE Username = @Username";
+                string query = "SELECT Id, Password FROM Users WHERE Username = @Username";
                 using (var command = new SQLiteCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Username", username);
-                    var result = command.ExecuteScalar();
+                    var reader = command.ExecuteReader();
 
-                    if (result != null)
+                    if (reader.Read())
                     {
-                        string storedHashedPassword = result.ToString();
-                        return VerifyPassword(password, storedHashedPassword);
+                        string storedHashedPassword = reader["Password"].ToString();
+                        if (VerifyPassword(password, storedHashedPassword))
+                        {
+                            int userId = Convert.ToInt32(reader["Id"]);
+                            SessionManager.Instance.SetUser(userId, username); // Set session data
+                            return true;
+                        }
                     }
                 }
             }
             return false;
         }
+
 
         private string HashPassword(string password)
         {
@@ -146,6 +175,7 @@ namespace demo2.Forms
         {
             string hashedEnteredPassword = HashPassword(enteredPassword);
             return hashedEnteredPassword == storedHashedPassword;
+
         }
 
 

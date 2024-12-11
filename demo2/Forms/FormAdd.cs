@@ -1,4 +1,5 @@
-﻿using System;
+﻿using demo2.Helpers;
+using System;
 using System.Data.SQLite;
 using System.Windows.Forms;
 
@@ -7,54 +8,46 @@ namespace demo2.Forms
     public partial class FormAdd : Form
     {
         private string connectionString = "Data Source=ReminderApp.db;";
-        private int taskId; // Task ID for editing
-        private readonly object dbLock = new object();
+        private int taskId;
 
-
-        // Constructor for adding a new task
         public FormAdd()
         {
             InitializeComponent();
             InitializeDatabase();
         }
 
-        // Constructor for editing an existing task
         public FormAdd(int taskId, string taskName, string taskDescription, DateTime reminder)
         {
             InitializeComponent();
             this.taskId = taskId;
-
-            // Populate the fields with the existing task data
             richTextBox1.Text = taskName;
             richTextBox2.Text = taskDescription;
         }
 
-        // Initialize the database and create the table if not already present
         private void InitializeDatabase()
         {
-            
+            using (var connection = new SQLiteConnection(connectionString))
             {
-                using (var connection = new SQLiteConnection(connectionString))
+                connection.Open();
+                string createTableQuery = @"
+                    CREATE TABLE IF NOT EXISTS Task (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        TaskName TEXT NOT NULL,
+                        Description TEXT NOT NULL,
+                        Reminder DATETIME,
+                        Passed TEXT DEFAULT 'No',
+                        UserId INTEGER,
+                        FOREIGN KEY (UserId) REFERENCES User(Id)
+                    );";
+                using (var command = new SQLiteCommand(createTableQuery, connection))
                 {
-                    connection.Open();
-                    string createTableQuery = @"
-                CREATE TABLE IF NOT EXISTS Task (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    TaskName TEXT NOT NULL,
-                    Description TEXT NOT NULL,
-                    Reminder DATETIME,
-                    Passed TEXT DEFAULT 'No'
-                );";
-                    using (var command = new SQLiteCommand(createTableQuery, connection))
+                    try
                     {
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error creating table: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error creating table: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -65,6 +58,13 @@ namespace demo2.Forms
             string taskName = richTextBox1.Text;
             string description = richTextBox2.Text;
             string reminder = maskedTextBox1.Text;
+            int userId = SessionManager.Instance.LoggedInUserId;
+
+            if (userId <= 0)
+            {
+                MessageBox.Show("Invalid User ID. Please log in first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(taskName) || string.IsNullOrWhiteSpace(description))
             {
@@ -85,8 +85,6 @@ namespace demo2.Forms
             }
 
             object reminderValue = parsedDate.ToString("yyyy-MM-dd HH:mm:ss");
-
-            // Determine if the task has passed
             string passedValue = parsedDate < DateTime.Now ? "Yes" : "No";
 
             using (var connection = new SQLiteConnection(connectionString))
@@ -98,12 +96,12 @@ namespace demo2.Forms
 
                 if (taskId == 0)
                 {
-                    query = "INSERT INTO Task (TaskName, Description, Reminder, Passed) VALUES (@TaskName, @Description, @Reminder, @Passed)";
+                    query = "INSERT INTO Task (TaskName, Description, Reminder, Passed, UserId) VALUES (@TaskName, @Description, @Reminder, @Passed, @UserId)";
                     command = new SQLiteCommand(query, connection);
                 }
                 else
                 {
-                    query = "UPDATE Task SET TaskName = @TaskName, Description = @Description, Reminder = @Reminder, Passed = @Passed WHERE Id = @TaskId";
+                    query = "UPDATE Task SET TaskName = @TaskName, Description = @Description, Reminder = @Reminder, Passed = @Passed, UserId = @UserId WHERE Id = @TaskId";
                     command = new SQLiteCommand(query, connection);
                     command.Parameters.AddWithValue("@TaskId", taskId);
                 }
@@ -112,6 +110,7 @@ namespace demo2.Forms
                 command.Parameters.AddWithValue("@Description", description);
                 command.Parameters.AddWithValue("@Reminder", reminderValue);
                 command.Parameters.AddWithValue("@Passed", passedValue);
+                command.Parameters.AddWithValue("@UserId", userId);
 
                 command.ExecuteNonQuery();
             }
@@ -121,17 +120,7 @@ namespace demo2.Forms
             richTextBox2.Clear();
             maskedTextBox1.Clear();
         }
-        private void EnableWalMode()
-        {
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SQLiteCommand("PRAGMA journal_mode=WAL;", connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
+
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void pictureBox1_Click(object sender, EventArgs e) { }
     }
