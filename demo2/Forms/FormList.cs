@@ -19,7 +19,7 @@ namespace demo2.Forms
 
         private void LoadTasks()
         {
-            string query = "SELECT Id, TaskName, Description, Reminder, Passed FROM Task WHERE UserId = @UserId";
+            string query = "SELECT Id, TaskName, Description, Reminder, Passed,Sound FROM Task WHERE UserId = @UserId";
             DataTable taskTable = new DataTable();
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
@@ -40,6 +40,7 @@ namespace demo2.Forms
                     dataGridViewTasks.Columns["Reminder"].HeaderText = "Reminder";
                     dataGridViewTasks.Columns["Passed"].HeaderText = "Passed";
                     dataGridViewTasks.Columns["Id"].Visible = false;
+                    dataGridViewTasks.Columns["Sound"].Visible = false;
                 }
                 catch (Exception ex)
                 {
@@ -58,7 +59,8 @@ namespace demo2.Forms
                 string taskName = selectedRow.Cells["TaskName"].Value.ToString();
                 string taskDescription = selectedRow.Cells["Description"].Value.ToString();
                 DateTime reminder = Convert.ToDateTime(selectedRow.Cells["Reminder"].Value);
-                FormAdd formAdd = new FormAdd(id, taskName, taskDescription, reminder);
+                string alarmSound = selectedRow.Cells["Sound"].Value.ToString();
+                FormAdd formAdd = new FormAdd(id, taskName, taskDescription, reminder, alarmSound);
                 formAdd.ShowDialog();
                 LoadTasks();
             }

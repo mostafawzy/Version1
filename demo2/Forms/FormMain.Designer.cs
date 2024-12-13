@@ -272,7 +272,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.FormMain_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -284,6 +283,8 @@
             this.ResumeLayout(false);
 
         }
+
+
 
         #endregion
 
@@ -301,5 +302,6 @@
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private FontAwesome.Sharp.IconButton iconButton1;
+
     }
 }

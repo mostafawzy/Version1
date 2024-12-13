@@ -1,4 +1,7 @@
-﻿namespace demo2.Forms
+﻿using System.Windows.Forms;
+using System.Drawing;
+
+namespace demo2.Forms
 {
     partial class FormAdd
     {
@@ -29,7 +32,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -44,7 +49,9 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
-            this.panel1.Controls.Add(this.maskedTextBox1);
+            this.panel1.Controls.Add(this.comboBox1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.dateTimePicker1);
             this.panel1.Controls.Add(this.richTextBox1);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.label3);
@@ -59,18 +66,49 @@
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // maskedTextBox1
+            // comboBox1
             // 
-            this.maskedTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
-            this.maskedTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.maskedTextBox1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold);
-            this.maskedTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.maskedTextBox1.Location = new System.Drawing.Point(274, 592);
-            this.maskedTextBox1.Mask = "00/00/0000 00:00";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(173, 37);
-            this.maskedTextBox1.TabIndex = 39;
-            this.maskedTextBox1.ValidatingType = typeof(System.DateTime);
+            this.comboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Font = new System.Drawing.Font("Century Gothic", 13F);
+            this.comboBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Default",
+            "Tone1",
+            "Tone2",
+            "Tone3",
+            "Tone4"});
+            this.comboBox1.Location = new System.Drawing.Point(290, 619);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(171, 40);
+            this.comboBox1.TabIndex = 42;
+            comboBox1.SelectedItem = "Default";
+
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
+            this.label2.Location = new System.Drawing.Point(25, 610);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(245, 34);
+            this.label2.TabIndex = 41;
+            this.label2.Text = "Reminder Sound:";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.CalendarMonthBackground = System.Drawing.SystemColors.Info;
+            this.dateTimePicker1.CustomFormat = "yyyy-MM-dd HH:mm";
+            this.dateTimePicker1.Font = new System.Drawing.Font("Century Gothic", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(290, 502);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.ShowUpDown = true;
+            this.dateTimePicker1.Size = new System.Drawing.Size(171, 39);
+            this.dateTimePicker1.TabIndex = 40;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // richTextBox1
             // 
@@ -88,7 +126,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.label1.Location = new System.Drawing.Point(25, 595);
+            this.label1.Location = new System.Drawing.Point(25, 496);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(201, 34);
             this.label1.TabIndex = 38;
@@ -121,9 +159,9 @@
             this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox2.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox2.Location = new System.Drawing.Point(31, 329);
+            this.richTextBox2.Location = new System.Drawing.Point(31, 281);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(395, 162);
+            this.richTextBox2.Size = new System.Drawing.Size(395, 127);
             this.richTextBox2.TabIndex = 35;
             this.richTextBox2.Text = "";
             // 
@@ -153,7 +191,7 @@
             this.labelTaskName.AutoSize = true;
             this.labelTaskName.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTaskName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
-            this.labelTaskName.Location = new System.Drawing.Point(25, 259);
+            this.labelTaskName.Location = new System.Drawing.Point(25, 211);
             this.labelTaskName.Name = "labelTaskName";
             this.labelTaskName.Size = new System.Drawing.Size(175, 34);
             this.labelTaskName.TabIndex = 25;
@@ -186,6 +224,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelTaskName;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private Label label2;
+        private ComboBox comboBox1;
     }
 }

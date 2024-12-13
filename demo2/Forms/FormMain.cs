@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -175,7 +176,7 @@ namespace demo2
               using (var connection = new SQLiteConnection(connectionString))
               {
                   connection.Open();
-                  string query = "SELECT Id, TaskName, Reminder, Passed FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
+                  string query = "SELECT Id, TaskName, Reminder, Passed ,Sound FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
                   using (var command = new SQLiteCommand(query, connection))
                   {
                       command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -188,7 +189,8 @@ namespace demo2
                               int taskId = Convert.ToInt32(reader["Id"]);
                               string taskName = reader["TaskName"].ToString();
                               DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
-                              DateTime currentTime = DateTime.Now;
+                              string soundFileName = reader["Sound"]?.ToString();
+                            DateTime currentTime = DateTime.Now;
         
                               if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
                               {
@@ -198,8 +200,8 @@ namespace demo2
                                       {
                                           soundPlayer = new System.Media.SoundPlayer
                                           {
-                                              SoundLocation = @"C:\Users\Sanag\Downloads\12345.wav"
-                                          };
+                                              SoundLocation = $@"D:\SaSa\icons\alarmTones\{soundFileName}.wav"
+                                          }; 
                                       }
                                       soundPlayer.PlayLooping();
                                       MessageBox.Show($"Reminder: {taskName} is due at {reminderTime}.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -249,15 +251,16 @@ namespace demo2
             {
                 connection.Open();
                 string createTableQuery = @"
-                CREATE TABLE IF NOT EXISTS Task (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    TaskName TEXT NOT NULL,
-                    Description TEXT NOT NULL,
-                    Reminder DATETIME,
-                    Passed TEXT DEFAULT 'No',
-                    UserId INTEGER,
+            CREATE TABLE IF NOT EXISTS Task (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                TaskName TEXT NOT NULL,
+                Description TEXT NOT NULL,
+                Reminder DATETIME,
+                Passed TEXT DEFAULT 'No',
+                UserId INTEGER,
+                Sound TEXT,
                 FOREIGN KEY (UserId) REFERENCES User(Id)
-                );";
+            );";
                 using (var command = new SQLiteCommand(createTableQuery, connection))
                 {
                     try
@@ -272,11 +275,16 @@ namespace demo2
             }
         }
 
-        private void FormMain_Load(object sender, EventArgs e) { }
+        
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e) { }
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e) { }
         private void dateTimePicker1_ValueChanged_1(object sender, EventArgs e) { }
         private void panel3_Paint(object sender, PaintEventArgs e){}
+
+        private void dateTimePicker1_ValueChanged_2(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
