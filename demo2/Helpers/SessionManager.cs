@@ -11,9 +11,6 @@ namespace demo2.Helpers
         private static SessionManager _instance;
         public int LoggedInUserId { get; private set; }
         public string LoggedInUsername { get; private set; }
-
-        private SessionManager() { }
-
         public static SessionManager Instance
         {
             get

@@ -1,13 +1,19 @@
 ﻿using demo2.Forms;
+using demo2.Helpers;
 using FontAwesome.Sharp;
 using System;
+using NAudio.Wave;
+using System.IO;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace demo2
 {
@@ -18,9 +24,10 @@ namespace demo2
         private Panel leftBorderBtn;
         private Form currentChildForm;
         private System.Windows.Forms.Timer reminderTimer;
-        private Timer dateTimeTimer;
-        private Timer reminderStopTimer;
+        private new System.Windows.Forms.Timer dateTimeTimer;
+        private new System.Windows.Forms.Timer reminderStopTimer;
         private System.Media.SoundPlayer soundPlayer;
+
 
         public FormMain()
         {
@@ -38,9 +45,12 @@ namespace demo2
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             reminderTimer = new System.Windows.Forms.Timer();
             reminderTimer.Interval = 1000;
-            reminderStopTimer = new Timer { Interval = 60000 };
+            reminderStopTimer =  new System.Windows.Forms.Timer { Interval = 60000 };
             reminderStopTimer.Tick += ReminderStopTimer_Tick;
+            this.MaximumSize = new Size(1100, 975);
         }
+        private SemaphoreSlim threadLimiter = new SemaphoreSlim(5); 
+
 
         private void ReminderStopTimer_Tick(object sender, EventArgs e)
         {
@@ -126,16 +136,38 @@ namespace demo2
             openChildForm(new FormDone());
         }
 
-        private void iconButton6_Click(object sender, EventArgs e)
-        {
-            ActivateButton(sender, RGBColors.color2);
-           
-        }
+        private void iconButton6_Click(object sender, EventArgs e){}
 
         private void iconButton5_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color1);
-            openChildForm(new FormLogin());
+
+            if (SessionManager.Instance.LoggedInUserId == 0) 
+            {
+                var loginForm = new FormLogin();
+                loginForm.OnLoginSuccessCallback = UpdateButtonText; 
+                openChildForm(loginForm);
+            }
+            else 
+            {
+                SessionManager.Instance.ClearSession();
+                MessageBox.Show("See you soon. Your tasks are waiting!");
+                UpdateButtonText();
+            }
+        }
+
+        private void UpdateButtonText()
+        {
+            if (SessionManager.Instance.LoggedInUserId == 0)
+            {
+                this.iconButton5.Text = "Login";
+                this.iconButton5.IconChar = FontAwesome.Sharp.IconChar.FaceGrin;
+            }
+            else
+            {
+                this.iconButton5.Text = "Logout";
+                this.iconButton5.IconChar = IconChar.RightFromBracket;
+            }
         }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
@@ -155,7 +187,7 @@ namespace demo2
 
         private void InitializeDateTimeUpdater()
         {
-            dateTimeTimer = new Timer { Interval = 1000 };
+            dateTimeTimer = new System.Windows.Forms.Timer { Interval = 1000 };
             dateTimeTimer.Tick += DateTimeTimer_Tick;
         }
 
@@ -166,79 +198,286 @@ namespace demo2
 
         private void InitializeReminderChecker()
         {
-            reminderTimer = new Timer { Interval = 1000 };
+            reminderTimer = new System.Windows.Forms.Timer { Interval = 1000 };
             reminderTimer.Tick += ReminderTimer_Tick;
             reminderTimer.Start();
         }
 
-          private void ReminderTimer_Tick(object sender, EventArgs e)
-          {
-              using (var connection = new SQLiteConnection(connectionString))
-              {
-                  connection.Open();
-                  string query = "SELECT Id, TaskName, Reminder, Passed ,Sound FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
-                  using (var command = new SQLiteCommand(query, connection))
-                  {
-                      command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                      using (var reader = command.ExecuteReader())
-                      {
-                          var taskIdsToUpdate = new List<int>();
-        
-                          while (reader.Read())
-                          {
-                              int taskId = Convert.ToInt32(reader["Id"]);
-                              string taskName = reader["TaskName"].ToString();
-                              DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
-                              string soundFileName = reader["Sound"]?.ToString();
+
+        //...................... WithOut_Threads................................
+
+        //private void ReminderTimer_Tick(object sender, EventArgs e)
+        //{
+        //    DateTime currentTime = DateTime.Now;
+        //    using (var connection = new SQLiteConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        string query = "SELECT Id, TaskName, Reminder, Passed ,Sound FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
+        //        using (var command = new SQLiteCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@CurrentTime", currentTime);
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                var taskIdsToUpdate = new List<int>();
+
+        //                while (reader.Read())
+        //                {
+        //                    int taskId = Convert.ToInt32(reader["Id"]);
+        //                    string taskName = reader["TaskName"].ToString();
+        //                    DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
+        //                    string soundFileName = reader["Sound"].ToString();
+        //                    // DateTime currentTime = DateTime.Now;
+
+        //                    if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
+        //                    {
+        //                        try
+        //                        {
+        //                            // Create a new SoundPlayer instance for each alarm
+        //                            using (var player = new System.Media.SoundPlayer
+        //                            {
+        //                                SoundLocation = $@"D:\SaSa\icons\alarmTones\{soundFileName}.wav"
+        //                                //SoundLocation = $@"D:\SaSa\icons\alarmTones\Tone1.wav"
+        //                            })
+        //                            {
+        //                                player.PlayLooping();
+        //                                MessageBox.Show(
+        //                                    $"Reminder: {taskName} is due at {reminderTime}.\n{GetThreadInfo(Thread.CurrentThread)}",
+        //                                    "Reminder",
+        //                                    MessageBoxButtons.OK,
+        //                                    MessageBoxIcon.Information);
+        //                                player.Stop();
+        //                            }
+        //                        }
+        //                        catch (Exception ex)
+        //                        {
+        //                            MessageBox.Show($"An error occurred while showing the reminder: {ex.Message}");
+        //                        }
+        //                        taskIdsToUpdate.Add(taskId);
+        //                    }
+        //                }
+
+        //                if (taskIdsToUpdate.Count > 0)
+        //                {
+        //                    UpdatePassedColumn(connection, taskIdsToUpdate);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+        //private void UpdatePassedColumn(SQLiteConnection connection, List<int> taskIds)
+        //{
+        //    string updateQuery = "UPDATE Task SET Passed ='Yes' WHERE Id = @Id";
+        //    using (var command = new SQLiteCommand(updateQuery, connection))
+        //    {
+        //        foreach (var taskId in taskIds)
+        //        {
+        //            command.Parameters.Clear();
+        //            command.Parameters.AddWithValue("@Id", taskId);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+
+
+        //.......................Using Task...............
+
+        //private async void ReminderTimer_Tick(object sender, EventArgs e)
+        //{
+        //    using (var connection = new SQLiteConnection(connectionString))
+        //    {
+        //        await connection.OpenAsync();
+        //        string query = "SELECT Id, TaskName, Reminder, Passed, Sound FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
+        //        using (var command = new SQLiteCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        //            using (var reader = await command.ExecuteReaderAsync())
+        //            {
+        //                var taskIdsToUpdate = new List<int>();
+        //                var tasks = new List<Task>();
+
+        //                while (await reader.ReadAsync())
+        //                {
+        //                    int taskId = Convert.ToInt32(reader["Id"]);
+        //                    string taskName = reader["TaskName"].ToString();
+        //                    DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
+        //                    string soundFileName = reader["Sound"].ToString();
+        //                    DateTime currentTime = DateTime.Now;
+
+        //                    if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
+        //                    {
+        //                        tasks.Add(Task.Run(() =>
+        //                        {
+        //                            try
+        //                            {
+        //                                var stopFlag = new ManualResetEvent(false);
+
+        //                                // Run PlaySound in a separate thread to avoid blocking
+        //                                Task.Run(() => PlaySound($@"D:\SaSa\icons\alarmTones\{soundFileName}.wav", stopFlag));
+
+        //                                // Show MessageBox (runs on this thread)
+        //                                MessageBox.Show(
+        //                                    $"Reminder: {taskName} is due at {reminderTime}.\n{GetThreadInfo(Thread.CurrentThread)}",
+        //                                    "Reminder",
+        //                                    MessageBoxButtons.OK,
+        //                                    MessageBoxIcon.Information);
+
+        //                                stopFlag.Set();
+        //                            }
+        //                            catch (Exception ex)
+        //                            {
+        //                                MessageBox.Show($"An error occurred while showing the reminder: {ex.Message}");
+        //                            }
+        //                        }));
+
+        //                        taskIdsToUpdate.Add(taskId);
+        //                    }
+        //                }
+
+        //                await Task.WhenAll(tasks); // Wait for all tasks to finish
+
+        //                if (taskIdsToUpdate.Count > 0)
+        //                {
+        //                    await UpdatePassedColumnAsync(connection, taskIdsToUpdate);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+
+
+
+      //  inputThreads
+        private async void ReminderTimer_Tick(object sender, EventArgs e)
+        {
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                string query = "SELECT Id, TaskName, Reminder, Passed, Sound FROM Task WHERE Reminder <= @CurrentTime AND Passed = 'No'";
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@CurrentTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        var taskIdsToUpdate = new List<int>();
+                        var tasks = new List<Task>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            int taskId = Convert.ToInt32(reader["Id"]);
+                            string taskName = reader["TaskName"].ToString();
+                            DateTime reminderTime = DateTime.Parse(reader["Reminder"].ToString());
+                            string soundFileName = reader["Sound"].ToString();
                             DateTime currentTime = DateTime.Now;
+
+                            if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
+                            {
+                                tasks.Add(Task.Run(async () =>
+                                {
+                                    await threadLimiter.WaitAsync();
+
+                                    try
+                                    {
+                                        var stopFlag = new ManualResetEvent(false);
+
+                                        Task.Run(() => PlaySound($@"D:\SaSa\icons\alarmTones\{soundFileName}.wav", stopFlag));
+
+                                        MessageBox.Show(
+                                            $"Reminder: {taskName} is due at {reminderTime}.\n{GetThreadInfo(Thread.CurrentThread)}",
+                                            "Reminder",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Information);
+
+                                        stopFlag.Set();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                    finally
+                                    {
+                                        threadLimiter.Release();
+                                    }
+                                }));
+
+                                taskIdsToUpdate.Add(taskId);
+                            }
+                        }
+
+                        await Task.WhenAll(tasks);
+
+                        if (taskIdsToUpdate.Count > 0)
+                        {
+                            await UpdatePassedColumnAsync(connection, taskIdsToUpdate);
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        private async Task UpdatePassedColumnAsync(SQLiteConnection connection, List<int> taskIds)
+        {
+            string updateQuery = "UPDATE Task SET Passed = 'Yes' WHERE Id = @Id";
+            using (var command = new SQLiteCommand(updateQuery, connection))
+            {
+                foreach (var taskId in taskIds)
+                {
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@Id", taskId);
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+        private void PlaySound(string filePath, ManualResetEvent stopFlag)
+        {
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    using (var audioFile = new AudioFileReader(filePath))
+                    using (var outputDevice = new WaveOutEvent())
+                    {
+                        outputDevice.Init(audioFile);
+                        outputDevice.Play();
+
+                        while (!stopFlag.WaitOne(100)) 
+                        {
+                            if (outputDevice.PlaybackState == PlaybackState.Stopped)
+                            {
+                                audioFile.Position = 0; 
+                                outputDevice.Play();    
+                                
+                            }
+                        }
+                        outputDevice.Stop();    
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error playing sound: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Sound file not found: {filePath}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        private static string GetThreadInfo(Thread th)
+        {
+            return $"Thread Info:\n" +
+                   $"Managed Thread ID: {th.ManagedThreadId}\n" +
+                   $"Is Thread Pool Thread: {th.IsThreadPoolThread}\n" +
+                   $"Is Background Thread: {th.IsBackground}";
+
+        }
+
         
-                              if (currentTime >= reminderTime && currentTime < reminderTime.AddSeconds(1))
-                              {
-                                  try
-                                  {
-                                      if (soundPlayer == null)
-                                      {
-                                          soundPlayer = new System.Media.SoundPlayer
-                                          {
-                                              SoundLocation = $@"D:\SaSa\icons\alarmTones\{soundFileName}.wav"
-                                          }; 
-                                      }
-                                      soundPlayer.PlayLooping();
-                                      MessageBox.Show($"Reminder: {taskName} is due at {reminderTime}.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                      soundPlayer.Stop();
-                                      taskIdsToUpdate.Add(taskId);
-                                  }
-                                  catch (Exception ex)
-                                  {
-                                      MessageBox.Show($"An error occurred while showing the reminder: {ex.Message}");
-                                  }
-                              }
-                          }
-        
-                          if (taskIdsToUpdate.Count > 0)
-                          {
-                              UpdatePassedColumn(connection, taskIdsToUpdate);
-                          }
-                      }
-                  }
-              }
-          }
-        
-          private void UpdatePassedColumn(SQLiteConnection connection, List<int> taskIds)
-          {
-              string updateQuery = "UPDATE Task SET Passed = 'Yes' WHERE Id = @Id";
-              using (var command = new SQLiteCommand(updateQuery, connection))
-              {
-                  foreach (var taskId in taskIds)
-                  {
-                      command.Parameters.Clear();
-                      command.Parameters.AddWithValue("@Id", taskId);
-                      command.ExecuteNonQuery();
-                  }
-              }
-          }
-        
-       
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             dateTimeTimer.Stop();
@@ -274,8 +513,9 @@ namespace demo2
                 }
             }
         }
-
         
+
+
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e) { }
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e) { }
@@ -285,6 +525,28 @@ namespace demo2
         private void dateTimePicker1_ValueChanged_2(object sender, EventArgs e)
         {
             
+        }
+
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(textBox1.Text, out int threadCount) && threadCount > 0)
+            {
+                threadLimiter = new SemaphoreSlim(threadCount); 
+            }
+            else
+            {
+                MessageBox.Show("Please enter a positive number.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -11,11 +11,13 @@ namespace demo2.Forms
     {
         
         private string connectionString = "Data Source=ReminderApp.db;";
+        public Action OnLoginSuccessCallback { get; set; }
 
         public FormLogin()
         {
             InitializeComponent();
             InitializeDatabase();
+
             this.Text = string.Empty;
             this.ControlBox = false;
         }
@@ -34,7 +36,8 @@ namespace demo2.Forms
 
             if (ValidateLogin(username, password))
             {
-                MessageBox.Show("Login successful!", "Success");
+                this.Close(); 
+                OnLoginSuccessCallback?.Invoke();
             }
             else
             {
@@ -111,29 +114,6 @@ namespace demo2.Forms
             }
             return true;
         }
-
-        // private bool ValidateLogin(string username, string password)
-        // {
-        //     using (var connection = new SQLiteConnection(connectionString))
-        //     {
-        //         connection.Open();
-        //
-        //         string query = "SELECT Password FROM Users WHERE Username = @Username";
-        //         using (var command = new SQLiteCommand(query, connection))
-        //         {
-        //             command.Parameters.AddWithValue("@Username", username);
-        //             var result = command.ExecuteScalar();
-        //
-        //             if (result != null)
-        //             {
-        //                 string storedHashedPassword = result.ToString();
-        //                 return VerifyPassword(password, storedHashedPassword);
-        //             }
-        //         }
-        //     }
-        //     return false;
-        // }
-
         private bool ValidateLogin(string username, string password)
         {
             using (var connection = new SQLiteConnection(connectionString))

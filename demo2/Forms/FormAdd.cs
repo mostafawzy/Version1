@@ -66,36 +66,25 @@ namespace demo2.Forms
 
             if (userId <= 0)
             {
-                MessageBox.Show("Invalid User ID. Please log in first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please log in first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(taskName) || string.IsNullOrWhiteSpace(description))
+            if (string.IsNullOrWhiteSpace(taskName) )
             {
-                MessageBox.Show("Task name and description are required.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Task name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-           //if (!DateTime.TryParse(reminder, out DateTime parsedDate))
-           //{
-           //    MessageBox.Show("Invalid reminder date and time format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-           //    return;
-           //}
-
-            // if (parsedDate < DateTime.Now)
-            // {
-            //     MessageBox.Show("Reminder time cannot be in the past.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //     return;
-            // }
+           
             if (reminder < DateTime.Now)
             {
-                MessageBox.Show("Reminder time cannot be in the past.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You entered Past Time!!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
 
-            // object reminderValue = parsedDate.ToString("yyyy-MM-dd HH:mm:ss");
-            // string passedValue = parsedDate < DateTime.Now ? "Yes" : "No";
+         
             string reminderValue = reminder.ToString("yyyy-MM-dd HH:mm:ss");
             string passedValue = reminder < DateTime.Now ? "Yes" : "No";
 

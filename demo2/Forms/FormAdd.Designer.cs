@@ -79,12 +79,11 @@ namespace demo2.Forms
             "Tone2",
             "Tone3",
             "Tone4"});
+            this.comboBox1.SelectedItem = "Default";
             this.comboBox1.Location = new System.Drawing.Point(290, 619);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(171, 40);
             this.comboBox1.TabIndex = 42;
-            comboBox1.SelectedItem = "Default";
-
             // 
             // label2
             // 
@@ -100,13 +99,13 @@ namespace demo2.Forms
             // dateTimePicker1
             // 
             this.dateTimePicker1.CalendarMonthBackground = System.Drawing.SystemColors.Info;
-            this.dateTimePicker1.CustomFormat = "yyyy-MM-dd HH:mm";
-            this.dateTimePicker1.Font = new System.Drawing.Font("Century Gothic", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePicker1.CustomFormat = "yyyy-MM-dd HH:mm:ss";
+            this.dateTimePicker1.Font = new System.Drawing.Font("Century Gothic", 15F);
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(290, 502);
+            this.dateTimePicker1.Location = new System.Drawing.Point(265, 501);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(171, 39);
+            this.dateTimePicker1.Size = new System.Drawing.Size(229, 44);
             this.dateTimePicker1.TabIndex = 40;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
@@ -146,9 +145,9 @@ namespace demo2.Forms
             // pictureBox1
             // 
             this.pictureBox1.Image = global::demo2.Properties.Resources.time1;
-            this.pictureBox1.Location = new System.Drawing.Point(477, 34);
+            this.pictureBox1.Location = new System.Drawing.Point(432, 34);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(369, 511);
+            this.pictureBox1.Size = new System.Drawing.Size(414, 542);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 36;
             this.pictureBox1.TabStop = false;

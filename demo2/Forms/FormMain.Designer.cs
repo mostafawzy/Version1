@@ -41,6 +41,8 @@
             this.titleChildForm = new System.Windows.Forms.Label();
             this.iconButton6 = new FontAwesome.Sharp.IconButton();
             this.panelDesktop = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.iconButton1 = new FontAwesome.Sharp.IconButton();
             this.panel1.SuspendLayout();
@@ -117,12 +119,13 @@
             this.maskedTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.maskedTextBox1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold);
             this.maskedTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
-            this.maskedTextBox1.Location = new System.Drawing.Point(21, 866);
+            this.maskedTextBox1.Location = new System.Drawing.Point(12, 866);
             this.maskedTextBox1.Mask = "00/00/0000 90:00";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(217, 37);
             this.maskedTextBox1.TabIndex = 40;
             this.maskedTextBox1.ValidatingType = typeof(System.DateTime);
+            this.maskedTextBox1.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
             // 
             // iconButton3
             // 
@@ -232,6 +235,8 @@
             // panelDesktop
             // 
             this.panelDesktop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
+            this.panelDesktop.Controls.Add(this.label1);
+            this.panelDesktop.Controls.Add(this.textBox1);
             this.panelDesktop.Controls.Add(this.pictureBox2);
             this.panelDesktop.Controls.Add(this.iconButton1);
             this.panelDesktop.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -241,8 +246,30 @@
             this.panelDesktop.Size = new System.Drawing.Size(880, 814);
             this.panelDesktop.TabIndex = 3;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(486, 741);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(161, 21);
+            this.label1.TabIndex = 41;
+            this.label1.Text = "Number Of Threads";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.textBox1.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(507, 765);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 27);
+            this.textBox1.TabIndex = 40;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // pictureBox2
             // 
+            this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(220)))));
             this.pictureBox2.Image = global::demo2.Properties.Resources.z;
             this.pictureBox2.Location = new System.Drawing.Point(0, 0);
             this.pictureBox2.Name = "pictureBox2";
@@ -279,6 +306,7 @@
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panelDesktop.ResumeLayout(false);
+            this.panelDesktop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
 
@@ -302,6 +330,7 @@
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private FontAwesome.Sharp.IconButton iconButton1;
-
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

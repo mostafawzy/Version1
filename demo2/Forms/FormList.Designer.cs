@@ -101,21 +101,20 @@ namespace demo2.Forms
             this.dataGridViewTasks.Location = new System.Drawing.Point(33, 27);
             this.dataGridViewTasks.Name = "dataGridViewTasks";
             this.dataGridViewTasks.ReadOnly = true;
-            this.dataGridViewTasks.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(160)))), ((int)(((byte)(149)))));
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Century Gothic", 30F, System.Drawing.FontStyle.Bold);
             dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(196)))), ((int)(((byte)(189)))));
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewTasks.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridViewTasks.RowHeadersWidth = 10;
+            this.dataGridViewTasks.RowHeadersWidth = 17;
             this.dataGridViewTasks.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(10);
             this.dataGridViewTasks.RowsDefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewTasks.RowTemplate.Height = 58;
-            this.dataGridViewTasks.Size = new System.Drawing.Size(583, 546);
+            this.dataGridViewTasks.Size = new System.Drawing.Size(583, 745);
             this.dataGridViewTasks.TabIndex = 4;
             this.dataGridViewTasks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTasks_CellContentClick);
             // 
